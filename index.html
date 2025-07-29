@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Perkalian</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 150px; }
+    .soal { font-size: 50px; margin-bottom: 20px; }
+    input, button { font-size: 38px; padding: 8px; }
+    #hasil, #skor, #waktu { margin-top: 15px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>⏱️ Perkalian Variasi by Ai</h1>
+  <div id="skor">Skor: 0</div>
+  <div id="waktu">Waktu Tersisa: 60 detik</div>
+  <div class="soal" id="soal"></div>
+  <input type="number" id="jawaban" placeholder="Jawaban kamu">
+  <br><br>
+  <button onclick="cekJawaban()">Cek</button>
+  <div id="hasil"></div>
+
+  <script>
+    let mode = "x_unknown"; // bisa ditambah mode lain
+    let known, hasil, skor = 0, waktuTersisa = 60;
+    let timer;
+
+    function buatSoal() {
+      const a = Math.floor(Math.random() * 10) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
+      hasil = a * b;
+      known = Math.random() > 0.5 ? a : b;
+
+      if (known === a) {
+        document.getElementById("soal").innerText = `${known} × ? = ${hasil}`;
+      } else {
+        document.getElementById("soal").innerText = `? × ${known} = ${hasil}`;
+      }
+
+      document.getElementById("jawaban").value = "";
+      document.getElementById("hasil").innerText = "";
+      mulaiTimer();
+    }
+
+    function mulaiTimer() {
+      clearInterval(timer);
+      waktuTersisa = 60;
+      document.getElementById("waktu").innerText = `Waktu Tersisa: ${waktuTersisa} detik`;
+
+      timer = setInterval(() => {
+        waktuTersisa--;
+        document.getElementById("waktu").innerText = `Waktu Tersisa: ${waktuTersisa} detik`;
+        if (waktuTersisa <= 0) {
+          clearInterval(timer);
+          document.getElementById("hasil").innerText = "⏰ Waktu habis! Soal baru...";
+          setTimeout(buatSoal, 2000);
+        }
+      }, 1000);
+    }
+
+    function cekJawaban() {
+      const input = parseInt(document.getElementById("jawaban").value);
+      const benar = hasil / known === input;
+
+      if (benar) {
+        skor += 10;
+        document.getElementById("hasil").innerText = "✅ Benar!";
+        document.getElementById("hasil").style.color = "green";
+      } else {
+        skor -= 5;
+        document.getElementById("hasil").innerText = `❌ Salah! Jawaban benar: ${hasil / known}`;
+        document.getElementById("hasil").style.color = "red";
+      }
+
+      document.getElementById("skor").innerText = `Skor: ${skor}`;
+      clearInterval(timer);
+      setTimeout(buatSoal, 20000);
+    }
+
+    buatSoal();
+  </script>
+</body>
+</html>

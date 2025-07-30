@@ -42,21 +42,22 @@
     let num1, correctAnswer;
 
     function generateStandardQuestion() {
-      const n1 = Math.floor(Math.random() * 10) + 1;
-      const n2 = Math.floor(Math.random() * 10) + 1;
-      num1 = n1;
-      correctAnswer = n1 * n2;
+      const n1 = Math.floor(Math.random() * 100) + 1;
+      const n2 = Math.floor(Math.random() * 100) + 1;
+      num1 = n1 * n2;
+      correctAnswer = num1;
       document.getElementById("question").innerText = `Berapa ${n1} × ${n2}?`;
       document.getElementById("answer").value = "";
       document.getElementById("feedback").innerText = "";
     }
 
     function generateMissingFactorQuestion() {
-      correctAnswer = Math.floor(Math.random() * 10) + 1; // nilai ? yang harus ditebak
-      const knownFactor = Math.floor(Math.random() * 10) + 1;
-      const hasil = correctAnswer * knownFactor;
-      num1 = correctAnswer;
-      document.getElementById("question").innerText = `? × ${knownFactor} = ${hasil}`;
+      const unknown = Math.floor(Math.random() * 10) + 1;
+      const known = Math.floor(Math.random() * 10) + 1;
+      const result = unknown * known;
+      num1 = unknown;
+      correctAnswer = unknown;
+      document.getElementById("question").innerText = `? × ${known} = ${result}`;
       document.getElementById("answer").value = "";
       document.getElementById("feedback").innerText = "";
     }
@@ -65,17 +66,24 @@
       const userAnswer = parseInt(document.getElementById("answer").value);
       const feedback = document.getElementById("feedback");
 
-      if (userAnswer === num1) {
+      if (isNaN(userAnswer)) {
+        feedback.innerText = "⚠️ Masukkan angka dulu ya!";
+        feedback.style.color = "orange";
+        return;
+      }
+
+      if (userAnswer === correctAnswer) {
         feedback.innerText = "✅ Benar! Hebat!";
         feedback.style.color = "green";
       } else {
-        feedback.innerText = `❌ Salah. Jawaban yang benar adalah ${num1}.`;
+        feedback.innerText = `❌ Salah. Jawaban yang benar adalah ${correctAnswer}.`;
         feedback.style.color = "red";
       }
     }
 
-    // Mulai dengan soal standar
-    generateStandardQuestion();
+    window.onload = function() {
+      generateStandardQuestion();
+    };
   </script>
 </body>
 </html>
